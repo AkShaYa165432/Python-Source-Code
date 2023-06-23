@@ -1,34 +1,38 @@
 node {
     def app
 
+ 
+
     stage('Clone Repository') {
-      
+
+
+ 
 
         checkout scm
     }
 
+ 
+
     stage('Build Image') {
-  
-       app = docker.build("dockersampath/packages")
+
+       app = docker.build("akshaya23/pythoncode")
+       sh 'docker run -d --name=img2 -p 3000:3000 akshaya23/pythoncode:latest'
     }
 
-    stage('Test Image') {
+ 
+
   
 
-        app.inside {
-            sh 'echo "Tests passed"'
-        }
-    }
+ 
 
     stage('Push Image') {
-        
+
         docker.withRegistry('https://registry.hub.docker.com', 'dockerhub') {
             app.push("${env.BUILD_NUMBER}")
         }
     }
-    
-    stage('Trigger ManifestUpdate') {
-                echo "triggering updatemanifestjob"
-                build job: 'updatemanifest', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-        }
+
+ 
+
+   
 }
