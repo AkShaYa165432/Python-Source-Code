@@ -16,7 +16,7 @@ node {
     stage('Build Image') {
 
        app = docker.build("akshaya23/pythoncode")
-       sh 'docker run -d --name=img2 -p 3000:3000 akshaya23/pythoncode:latest'
+       sh 'docker run -d --name=img2 -p 3001:3000 akshaya23/pythoncode:latest'
     }
 
  
