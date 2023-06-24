@@ -16,14 +16,8 @@ node {
     stage('Build Image') {
 
        app = docker.build("akshaya23/pythoncode")
-       sh 'docker run -d --name=img3 -p 3000:3000 akshaya23/pythoncode:latest'
+       
     }
-
- 
-
-  
-
- 
 
     stage('Push Image') {
 
@@ -31,6 +25,11 @@ node {
             app.push("${env.BUILD_NUMBER}")
         }
     }
+    stage('Docker Run') {
+	def dockerImage = docker.image('akshaya23/pythoncode:'+"${env.BUILD_NUMBER}")
+            sh 'docker rm -f app'
+            dockerImage.run('-d -p 8081:8080 --name app')  
+	}
 
  
 
